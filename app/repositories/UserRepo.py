@@ -1,7 +1,8 @@
-import json
-from turtle import position
+
 from app.utils.UserUtil import UserUtil, InfoUser
+from app.utils.ExamUtil import ExamUtil
 from app.models.User import User
+from app.models.Exam import Exam
 from .__init__ import *
 
 
@@ -13,6 +14,10 @@ class UserRepo(BaseRepo):
 
     def create_user(self, user: User):
         res = self.collection.insert_one(user.__dict__)
+        return res
+
+    def delete_user(self, email: str):
+        res = self.collection.delete_one({"email": email})
         return res
 
     def get_info_user(self, email):
@@ -44,6 +49,13 @@ class UserRepo(BaseRepo):
             return None
         else:
             return UserUtil.format_user(users[0])
+
+    def get_users_in_room(self, room):
+        users = list(self.collection.find({"room": room}))
+        list_users = []
+        for record in users:
+            list_users.append(UserUtil.format_info_user(record))
+        return list_users
 
     def update_token(self, email, token):
         query = { "email": email}

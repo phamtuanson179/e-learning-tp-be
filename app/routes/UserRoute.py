@@ -6,6 +6,12 @@ from app.models.User import InfoUser, NewUser
 
 router = APIRouter()
 
+@router.get("/get_exam")
+async def get_exam(id: int, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = UserService().get_exam(id)
+        return res
+
 @router.get("/get_user")
 async def get_user(email: str, token: str = Header(None)):
     if AuthService().validate_token(token):
