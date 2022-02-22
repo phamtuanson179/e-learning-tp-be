@@ -1,6 +1,22 @@
-from app.models.User import User, AccessToken
+from app.models.User import User, AccessToken, InfoUser
 
 class UserUtil:
+
+    def format_info_user(user) -> User:
+        return InfoUser(
+            email=user["email"],
+            room=user["room"],
+            fullname=user["fullname"],
+            position=user["position"],
+            date_of_birth=user["date_of_birth"],
+            url_avatar=user["url_avatar"]
+        )
+
+    def format_token(user) -> AccessToken:
+        return AccessToken(
+            email=user["email"],
+            token=user["token"]
+        )
 
     def format_user(user) -> User:
         return User(
@@ -15,8 +31,4 @@ class UserUtil:
             token=user["token"]
         )
 
-    def format_token(user) -> AccessToken:
-        return AccessToken(
-            email=user["email"],
-            token=user["token"]
-        )
+    
