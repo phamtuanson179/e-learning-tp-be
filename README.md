@@ -1,6 +1,7 @@
 # E-Learning System
 ## Hướng dẫn sử dụng
 
+- Cài python, git, mongodb
 - Clone project
     ```shell
     $ git clone https://gitlab.com/techproai/e-learning-system.git
