@@ -18,7 +18,7 @@ async def get_user(email: str, token: str = Header(None)):
         res = UserService().get_user(email)
         return res
 
-@router.post("/update_user")
+@router.put("/update_user")
 async def update_user(info: InfoUser, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = UserService().update_user(info)

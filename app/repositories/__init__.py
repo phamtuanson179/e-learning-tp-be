@@ -4,7 +4,9 @@ class BaseRepo:
     def __init__(self):
         self.myclient = pymongo.MongoClient(db_config['url'])
         self.mydb = self.myclient[db_config['name']]
+        # print("aaaaaaaaaaaaa", self.myclient.server_info())
 
+    #ket noi db o local
     #First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]
         # mydict = {"email": "test@gmail.com", "password": "123", "role": 0, "room": "AI", "fullname": "Test User", "position": "Frontend Developer", "date_of_birth": "01-01-1999", "url_avatar": "", "token": ""}
