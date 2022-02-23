@@ -1,0 +1,11 @@
+database: 
+  url: mongodb://localhost:27017/
+  name: techpro_elearning
+
+auth:
+  secret_key: elearning_techpro
+  algorithm: HS256
+  expire_minutes: 540
+
+#540mins = 9hours = 8 work hours + 1 relax hour
+  
