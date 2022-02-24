@@ -1,7 +1,6 @@
 
-from app.utils.UserUtil import UserUtil, InfoUser
+from app.utils.UserUtil import UserUtil, User
 from app.utils.ExamUtil import ExamUtil
-from app.models.User import User
 from app.models.Exam import Exam
 from .__init__ import *
 
@@ -63,7 +62,7 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, { "$set": value})
         return res
 
-    def update_user(self, info: InfoUser):
+    def update_user(self, info: User):
         query = { "email": info.email}
         value = { "room": info.room,
                 "fullname": info.fullname,

@@ -2,7 +2,7 @@ import starlette.status
 
 from app.repositories.UserRepo import UserRepo
 from app.repositories.ExamRepo import ExamRepo
-from app.models.User import InfoUser, NewUser, User
+from app.models.User import NewUser, User
 from app.models.Exam import Exam
 from app.exceptions.CredentialException import CredentialException
 from app.utils.AuthUtil import AuthUtil
@@ -47,7 +47,7 @@ class UserService:
         list_users = self.repo.get_users_in_room(room)
         return list_users
 
-    def update_user(self, info: InfoUser):
+    def update_user(self, info: User):
         res = self.repo.update_user(info)
         if not res:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error")
