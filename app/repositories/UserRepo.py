@@ -1,7 +1,5 @@
 
 from app.utils.UserUtil import UserUtil, User
-from app.utils.ExamUtil import ExamUtil
-from app.models.Exam import Exam
 from .__init__ import *
 
 

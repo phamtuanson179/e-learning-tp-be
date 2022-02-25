@@ -4,6 +4,7 @@ class UserUtil:
 
     def format_info_user(user) -> User:
         return User(
+            user_id= str(user["_id"]),
             email=user["email"],
             role=user["role"],
             room=user["room"],

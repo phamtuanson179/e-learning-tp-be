@@ -7,6 +7,7 @@ class Account(BaseModel):
     password: Optional[str] = None
 
 class User(Account):
+    user_id: Optional[str] = None
     role: Optional[int] = None
     room: str
     fullname: str
