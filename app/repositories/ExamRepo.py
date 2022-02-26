@@ -2,6 +2,7 @@
 from app.configs.Config import prj_config
 from app.utils.ExamUtil import ExamUtil
 from app.utils.TimeUtil import TimeUtil
+from app.utils.CommonUtil import CommonUtil
 from app.models.Exam import Exam
 from .__init__ import *
 
@@ -14,7 +15,7 @@ class ExamRepo(BaseRepo):
 
     def create_exam(self, exam: Exam):
         exam.id = prj_config['alias'] + TimeUtil.get_timestamp_now()
-        exam_to_dict = ExamUtil().nested_dict(exam)
+        exam_to_dict = CommonUtil().nested_dict(exam)
         res = self.collection.insert_one(exam_to_dict)
         return res
 
