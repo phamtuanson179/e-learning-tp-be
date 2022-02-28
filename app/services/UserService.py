@@ -1,7 +1,9 @@
 import starlette.status
 
 from app.repositories.UserRepo import UserRepo
+from app.repositories.ExamRepo import ExamRepo
 from app.models.User import NewUser, User
+from app.models.Exam import Exam
 from app.exceptions.CredentialException import CredentialException
 from app.utils.AuthUtil import AuthUtil
 
