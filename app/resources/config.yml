@@ -7,6 +7,18 @@ auth:
   secret_key: elearning_techpro
   algorithm: HS256
   expire_minutes: 540
+#540mins = 9hours = 8 work hours + 1 relax hour
+
+mail:
+  MAIL_USERNAME: elearningtechpro@gmail.com
+  MAIL_PASSWORD: Elearning2022
+  MAIL_FROM: elearningtechpro@gmail.com
+  MAIL_PORT: 587
+  MAIL_SERVER: smtp.gmail.com
+  MAIL_TLS: True
+  MAIL_SSL: False
+  USE_CREDENTIALS: True
+  VALIDATE_CERTS: True
 
 project:
   alias: TEL

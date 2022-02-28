@@ -2,6 +2,7 @@ from fastapi import APIRouter, Header
 
 from app.services.UserService import UserService
 from app.services.AuthService import AuthService
+from app.models.User import User, NewUser
 from app.services.ExamService import ExamService
 from app.models.User import User
 
