@@ -2,24 +2,19 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-class User(BaseModel):
+class Account(BaseModel):
     email: str
-    password: str
-    role: int
+    password: Optional[str] = None
+
+class User(Account):
+    user_id: Optional[str] = None
+    role: Optional[int] = None
     room: str
     fullname: str
     position: str
     date_of_birth: Optional[str] = None
     url_avatar: Optional[str] = None
     token: Optional[str] = None
-
-class InfoUser(BaseModel):
-    email: str
-    room: str
-    fullname: str
-    position: str
-    date_of_birth: Optional[str] = None
-    url_avatar: Optional[str] = None
 
 class NewUser(BaseModel):
     email: str

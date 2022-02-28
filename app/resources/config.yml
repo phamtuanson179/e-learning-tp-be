@@ -8,4 +8,6 @@ auth:
   algorithm: HS256
   expire_minutes: 540
 
+project:
+  alias: TEL
 #540mins = 9hours = 8 work hours + 1 relax hour

@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from app.models.Question import Question
 
 class Exam(BaseModel):
-    id: int
+    id: Optional[str] = None
     name: str
     min_point_to_pass: int
     duration: int
