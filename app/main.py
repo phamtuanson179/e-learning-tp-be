@@ -4,7 +4,6 @@ sys.path.append('''E:\Work\TechSoft\Elearning''')
 from app.routes import AuthRoute, UserRoute, AdminRoute
 from fastapi.middleware.cors import CORSMiddleware
 
-
 app = FastAPI()
 app.add_middleware(
 	CORSMiddleware,
