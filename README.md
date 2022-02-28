@@ -27,3 +27,4 @@
     ```shell
     (venv)$ python application.py
     ```
+- Swagger: http://localhost:8000/docs#/
