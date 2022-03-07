@@ -14,7 +14,7 @@ async def get_exam(id: str, token: str = Header(None)):
         res = ExamService().get_exam(id)
         return res
 
-@router.post("/get_exams_for_room")
+@router.get("/get_exams_for_room")
 async def get_exams_for_room(room: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = ExamService().get_exams_for_room(room)
@@ -24,6 +24,12 @@ async def get_exams_for_room(room: str, token: str = Header(None)):
 async def get_user(email: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = UserService().get_user(email)
+        return res
+
+@router.post("/mark_exam")
+async def mark_exam(room: str, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_exams_for_room(room)
         return res
 
 @router.put("/update_user")
