@@ -11,3 +11,12 @@ class Exam(BaseModel):
     created_by: str
     require_rooms: List[str]
     questions: List[Question]
+
+class Result(BaseModel):
+    id: Optional[str] = None
+    user_id: str
+    exam_id: str
+    point: int
+    max_point: int
+    is_pass: bool
+    duration: int

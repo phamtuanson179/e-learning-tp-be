@@ -1,7 +1,8 @@
 import starlette.status
 
 from app.repositories.ExamRepo import ExamRepo
-from app.models.Exam import Exam
+from app.repositories.ResultRepo import ResultRepo
+from app.models.Exam import Exam, Result
 from app.exceptions.CredentialException import CredentialException
 
 class ExamService:
@@ -28,3 +29,11 @@ class ExamService:
     def get_exams_for_room(self, room: str):
         list_exams = self.repo.get_exams_for_room(room)
         return list_exams
+
+    def get_history_a_exam(self, user_id: str, exam_id: str):
+        list_history = ResultRepo().get_history_a_exam(user_id, exam_id)
+        return list_history
+
+    def save_result(self, new_result: Result):
+        res =  ResultRepo().save_result(new_result)
+        return "Save result success"

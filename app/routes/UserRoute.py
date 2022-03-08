@@ -5,6 +5,7 @@ from app.services.AuthService import AuthService
 from app.models.User import User, NewUser
 from app.services.ExamService import ExamService
 from app.models.User import User
+from app.models.Exam import Result
 
 router = APIRouter()
 
@@ -12,6 +13,12 @@ router = APIRouter()
 async def get_exam(id: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = ExamService().get_exam(id)
+        return res
+
+@router.get("/get_history_a_exam")
+async def get_history_a_exam(user_id: str, exam_id: str, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_history_a_exam(user_id, exam_id)
         return res
 
 @router.get("/get_exams_for_room")
@@ -30,6 +37,12 @@ async def get_user(email: str, token: str = Header(None)):
 async def mark_exam(room: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = ExamService().get_exams_for_room(room)
+        return res
+
+@router.post("/save_result")
+async def save_result(result: Result, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = ExamService().save_result(result)
         return res
 
 @router.put("/update_user")
