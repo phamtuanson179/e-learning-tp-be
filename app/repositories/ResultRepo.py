@@ -1,6 +1,6 @@
 
-from app.models.Exam import Result
-from app.utils.ExamUtil import ExamUtil
+from app.models.Result import Result
+from app.utils.ResultUtil import ResultUtil
 from . import *
 
 
@@ -10,11 +10,11 @@ class ResultRepo(BaseRepo):
         super().__init__()
         self.collection = self.mydb[collection]
 
-    def get_history_a_exam(self, user_id, exam_id):
+    def get_exam_history(self, user_id, exam_id):
         res = self.collection.find({"user_id": user_id, "exam_id": exam_id})
         list_result = []
         for result in res:
-            list_result.append(ExamUtil.format_result(result))
+            list_result.append(ResultUtil.format_result(result))
         return list_result
 
     def save_result(self, testResult: Result):

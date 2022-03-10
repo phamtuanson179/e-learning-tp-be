@@ -1,9 +1,8 @@
-
 from app.configs.Config import prj_config
 from app.utils.ExamUtil import ExamUtil
 from app.utils.TimeUtil import TimeUtil
 from app.utils.CommonUtil import CommonUtil
-from app.models.Exam import Exam, Result
+from app.models.Exam import Exam
 from .__init__ import *
 
 
@@ -39,5 +38,3 @@ class ExamRepo(BaseRepo):
         for record in exams:
             list_exams.append(ExamUtil.format_exam(record))
         return list_exams
-
-    
