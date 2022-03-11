@@ -1,4 +1,3 @@
-
 from app.configs.Config import prj_config
 from app.utils.ExamUtil import ExamUtil
 from app.utils.TimeUtil import TimeUtil

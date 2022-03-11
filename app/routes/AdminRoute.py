@@ -4,14 +4,14 @@ from app.services.UserService import UserService
 from app.services.AuthService import AuthService
 from app.services.ExamService import ExamService
 from app.models.User import NewUser
-from app.models.Exam import Exam
+from app.models.Exam import NewExam
 
 router = APIRouter()
 
 @router.post("/admin/add_exam")
-async def create_exam(new_exam: Exam, token: str = Header(None)):
-    if AuthService().validate_token(token):
-        res = ExamService().create_exam(new_exam)
+async def create_exam(new_exam: NewExam, token: str = Header(None)):
+    if AuthService().validate_token(token): 
+        res = ExamService().create_exam(new_exam, token)
         return res
 
 @router.post("/admin/add_user")
