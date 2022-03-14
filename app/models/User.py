@@ -20,8 +20,8 @@ class User(Account):
 class NewUser(BaseModel):
     email: str
     password: str
-    role: int
     room: str
+    role: int
     fullname: str
     position: str
 

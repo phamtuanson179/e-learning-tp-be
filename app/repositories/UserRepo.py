@@ -19,6 +19,13 @@ class UserRepo(BaseRepo):
         res = self.collection.delete_one({"email": email})
         return res
 
+    def get_all_admin(self):
+        admins = list(self.collection.find({"role": 1}))
+        list_admins = []
+        for record in admins:
+            list_admins.append(UserUtil.format_info_user(record))
+        return list_admins
+
     def get_info_user(self, email):
         users = list(self.collection.find({"email": email}))
         count = 0
@@ -55,6 +62,18 @@ class UserRepo(BaseRepo):
         for record in users:
             list_users.append(UserUtil.format_info_user(record))
         return list_users
+
+    def update_admin(self, info: User):
+        query = { "email": info.email}
+        value = { "room": info.room,
+                "fullname": info.fullname,
+                "role": info.role,
+                "position": info.position,
+                "date_of_birth": info.date_of_birth,
+                "url_avatar": info.url_avatar
+                }
+        res = self.collection.update_one(query, { "$set": value})
+        return res
 
     def update_token(self, email, token):
         query = { "email": email}
