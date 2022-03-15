@@ -5,7 +5,7 @@ from app.repositories.ResultRepo import ResultRepo
 from app.models.Exam import Exam, NewExam
 from app.models.Result import Result
 from app.exceptions.CredentialException import CredentialException
-from app.configs.Config import auth_config
+from app.configs.Config import AuthConfig
 
 class ExamService:
     
@@ -14,7 +14,7 @@ class ExamService:
         self.repo = ExamRepo()
 
     def create_exam(self, new_exam: NewExam, token):
-        payload = jwt.decode(token, auth_config['secret_key'], algorithms=auth_config['algorithm'])
+        payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
         email: str = payload.get("email")
         exam = Exam(name=new_exam.name, 
                     min_point_to_pass=new_exam.min_point_to_pass, 

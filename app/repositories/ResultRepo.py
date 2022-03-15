@@ -1,5 +1,3 @@
-
-from tokenize import group
 from app.models.Result import Result
 from app.utils.ResultUtil import ResultUtil
 from . import *
@@ -26,7 +24,6 @@ class ResultRepo(BaseRepo):
         ])
         list_result = []
         for result in res:
-            print("rsssss", result)
             list_result.append(ResultUtil.format_result(result))
         return list_result
 
