@@ -42,5 +42,5 @@ async def save_result(result: Result, token: str = Header(None)):
 @router.put("/update_user")
 async def update_user(info: User, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().update_user(info)
+        res = UserService().update_user(info, token)
         return res

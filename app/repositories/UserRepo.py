@@ -26,6 +26,13 @@ class UserRepo(BaseRepo):
             list_admins.append(UserUtil.format_info_user(record))
         return list_admins
 
+    def get_all_super_admin(self):
+        admins = list(self.collection.find({"role": 2}))
+        list_super_admins = []
+        for record in admins:
+            list_super_admins.append(UserUtil.format_info_user(record))
+        return list_super_admins
+
     def get_info_user(self, email):
         users = list(self.collection.find({"email": email}))
         count = 0

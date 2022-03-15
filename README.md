@@ -23,6 +23,9 @@
     ```shell
     (venv)$ pip install -r requirements.txt
     ```
+    ```shell
+    (venv)$ pip install bcrypt
+    ```
 - Run project
     ```shell
     (venv)$ python application.py

@@ -10,42 +10,65 @@ router = APIRouter()
 
 @router.post("/admin/add_exam")
 async def create_exam(new_exam: NewExam, token: str = Header(None)):
-    if AuthService().validate_token(token): 
-        res = ExamService().create_exam(new_exam, token)
-        return res
+    if AuthService().validate_token(token):
+        if UserService().check_admin_permission(token):
+            res = ExamService().create_exam(new_exam, token)
+            return res
 
 @router.post("/admin/add_user")
 async def create_user(new_user: NewUser, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().create_user(new_user, token)
-        return res
+        if (new_user.role == 2):
+            if UserService().check_super_admin_permission(token):
+                res = UserService().create_user(new_user)
+                return res
+        elif UserService().check_admin_permission(token):
+            res = UserService().create_user(new_user)
+            return res
 
 @router.delete("/admin/delete_exam")
 async def delete_exam(id: str, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = ExamService().delete_exam(id)
-        return res
+        if UserService().check_admin_permission(token):
+            res = ExamService().delete_exam(id)
+            return res
 
 @router.delete("/admin/delete_user")
 async def delete_user(email: str, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().delete_user(email)
-        return res
+        if UserService().check_admin_permission(token):
+            res = UserService().delete_user(email)
+            return res
 
 @router.post("/admin/get_all_admin")
 async def get_all_admin(token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().get_all_admin()
-        return res
+        if UserService().check_super_admin_permission(token):
+            res = UserService().get_all_admin()
+            return res
+
+@router.post("/admin/get_all_super_admin")
+async def get_all_super_admin(token: str = Header(None)):
+    if AuthService().validate_token(token):
+        if UserService().check_super_admin_permission(token):
+            res = UserService().get_all_super_admin()
+            return res
 
 @router.post("/admin/get_users_in_room")
 async def get_users_in_room(room: str, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().get_users_in_room(room)
-        return res
+        if UserService().check_admin_permission(token):
+            res = UserService().get_users_in_room(room)
+            return res
 
 @router.put("/admin/update_admin")
 async def update_admin(info: User, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = UserService().update_admin(info)
-        return res
+        if (info.role == 2):
+            if UserService().check_super_admin_permission(token):
+                res = UserService().update_admin(info)
+                return res
+        elif (info.role == 1):
+            if UserService().check_admin_permission(token):
+                res = UserService().update_admin(info)
+                return res
