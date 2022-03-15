@@ -10,16 +10,20 @@ auth:
 #540mins = 9hours = 8 work hours + 1 relax hour
 
 mail:
-  MAIL_USERNAME: elearningtechpro@gmail.com
-  MAIL_PASSWORD: Elearning2022
-  MAIL_FROM: elearningtechpro@gmail.com
-  MAIL_PORT: 587
-  MAIL_SERVER: smtp.gmail.com
-  MAIL_TLS: True
-  MAIL_SSL: False
-  USE_CREDENTIALS: True
-  VALIDATE_CERTS: True
+  mail_username: elearningtechpro@gmail.com
+  mail_password: Elearning2022
+  mail_from: elearningtechpro@gmail.com
+  mail_port: 587
+  mail_server: smtp.gmail.com
+  mail_tls: True
+  mail_ssl: False
+  use_credentials: True
+  validate_certs: True
 
 project:
   alias: TEL
-#540mins = 9hours = 8 work hours + 1 relax hour
+
+role:
+  user: 0
+  admin: 1
+  superadmin: 2

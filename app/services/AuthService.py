@@ -5,7 +5,7 @@ from app.repositories.UserRepo import UserRepo
 from app.services.UserService import UserService
 from app.exceptions.CredentialException import CredentialException
 from app.utils.AuthUtil import AuthUtil
-from app.configs.Config import auth_config
+from app.configs.Config import AuthConfig
 from app.utils import EmailUtil
 import string, random
 
@@ -31,9 +31,11 @@ class AuthService:
 
     def validate_token(self, token: str):
         try:
-            payload = jwt.decode(token, auth_config['secret_key'], algorithms=auth_config['algorithm'])
-            email: str = payload.get("email")
-            exp = payload.get("exp")
+            data = AuthUtil.decode_token(token)
+            email: str = data["email"]
+            exp = data["exp"]
+            print("daaaa", email)
+            print("daaaa1", self.repo.get_token_by_email(email).token)
             expire = datetime.fromtimestamp(exp)
             if not self.repo.get_token_by_email(email):
                 raise CredentialException(message="Could not validate credentials")
@@ -42,13 +44,13 @@ class AuthService:
             if expire < datetime.utcnow():
                 raise CredentialException(message="Token expired")
         except:
-            raise CredentialException(message="Could not validate credentials")
+            raise CredentialException(message="Could not validate credentials3")
         return True
 
     def validate_password(self, password, token: str):
         try:
-            payload = jwt.decode(token, auth_config['secret_key'], algorithms=auth_config['algorithm'])
-            email: str = payload.get("email")
+            data = AuthUtil.decode_token(token)
+            email: str = data["email"]
             user = self.repo.get_user_by_email(email)
             if not AuthUtil.verify_password(password, user.password):
                 raise CredentialException(message="UNAUTHORIZED")
@@ -92,7 +94,7 @@ class AuthService:
             raise CredentialException(message="New password does not match confirm password")
         
         # reset token and change password then save database
-        payload = jwt.decode(token, auth_config['secret_key'], algorithms=auth_config['algorithm'])
+        payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
         email: str = payload.get("email")
         change_password = AuthService().change_password(email, new_pass)
 

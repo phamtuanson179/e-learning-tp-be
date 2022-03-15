@@ -3,6 +3,7 @@ from app.utils.UserUtil import UserUtil, User
 from app.utils.ExamUtil import ExamUtil
 from app.models.Exam import Exam
 from .__init__ import *
+from app.configs.Config import RoleConfig
 
 
 class UserRepo(BaseRepo):
@@ -18,6 +19,20 @@ class UserRepo(BaseRepo):
     def delete_user(self, email: str):
         res = self.collection.delete_one({"email": email})
         return res
+
+    def get_all_admin(self):
+        admins = list(self.collection.find({"role": RoleConfig.ROLE_ADMIN}))
+        list_admins = []
+        for record in admins:
+            list_admins.append(UserUtil.format_info_user(record))
+        return list_admins
+
+    def get_all_super_admin(self):
+        admins = list(self.collection.find({"role": RoleConfig.ROLE_SUPERADMIN}))
+        list_super_admins = []
+        for record in admins:
+            list_super_admins.append(UserUtil.format_info_user(record))
+        return list_super_admins
 
     def get_info_user(self, email):
         users = list(self.collection.find({"email": email}))
@@ -55,6 +70,18 @@ class UserRepo(BaseRepo):
         for record in users:
             list_users.append(UserUtil.format_info_user(record))
         return list_users
+
+    def update_admin(self, info: User):
+        query = { "email": info.email}
+        value = { "room": info.room,
+                "fullname": info.fullname,
+                "role": info.role,
+                "position": info.position,
+                "date_of_birth": info.date_of_birth,
+                "url_avatar": info.url_avatar
+                }
+        res = self.collection.update_one(query, { "$set": value})
+        return res
 
     def update_token(self, email, token):
         query = { "email": email}
