@@ -45,6 +45,10 @@ class ExamService:
         list_history = ResultRepo().get_exam_history(user_id, exam_id)
         return list_history
 
+    def get_exam_ranking(self, exam_id: str):
+        list_history = ResultRepo().get_exam_ranking(exam_id)
+        return list_history
+
     def save_result(self, new_result: Result):
         res =  ResultRepo().save_result(new_result)
         return "Save result success"

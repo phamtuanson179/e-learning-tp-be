@@ -19,12 +19,12 @@ async def create_exam(new_exam: NewExam, token: str = Header(None)):
 async def create_user(new_user: NewUser, token: str = Header(None)):
     if AuthService().validate_token(token):
         if (new_user.role == 2):
-            if UserService().check_super_admin_permission(token):
-                res = UserService().create_user(new_user)
-                return res
-        elif UserService().check_admin_permission(token):
-            res = UserService().create_user(new_user)
-            return res
+            if not UserService().check_super_admin_permission(token):
+                return "Permission denied"
+        elif not UserService().check_admin_permission(token):
+            return "Permission denied"
+        res = UserService().create_user(new_user)
+        return res
 
 @router.delete("/admin/delete_exam")
 async def delete_exam(id: str, token: str = Header(None)):
@@ -65,10 +65,10 @@ async def get_users_in_room(room: str, token: str = Header(None)):
 async def update_admin(info: User, token: str = Header(None)):
     if AuthService().validate_token(token):
         if (info.role == 2):
-            if UserService().check_super_admin_permission(token):
-                res = UserService().update_admin(info)
-                return res
+            if not UserService().check_super_admin_permission(token):
+                return "Permission denied"
         elif (info.role == 1):
-            if UserService().check_admin_permission(token):
-                res = UserService().update_admin(info)
-                return res
+            if not UserService().check_admin_permission(token):
+                return "Permission denied"
+        res = UserService().update_admin(info)
+        return res

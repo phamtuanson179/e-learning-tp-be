@@ -21,6 +21,12 @@ async def get_exam_history(user_id: str, exam_id: str, token: str = Header(None)
         res = ExamService().get_exam_history(user_id, exam_id)
         return res
 
+@router.get("/get_exam_ranking")
+async def get_exam_higet_exam_rankingstory(exam_id: str, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_exam_ranking(exam_id)
+        return res
+
 @router.get("/get_exams_for_room")
 async def get_exams_for_room(room: str, token: str = Header(None)):
     if AuthService().validate_token(token):
