@@ -5,7 +5,7 @@ from app.services.AuthService import AuthService
 from app.models.User import User
 from app.services.ExamService import ExamService
 from app.models.User import User
-from app.models.Result import Result
+from app.models.Result import Result, NewResult
 
 router = APIRouter()
 
@@ -21,10 +21,16 @@ async def get_exam_history(user_id: str, exam_id: str, token: str = Header(None)
         res = ExamService().get_exam_history(user_id, exam_id)
         return res
 
-@router.get("/get_exam_ranking")
-async def get_exam_ranking(exam_id: str, token: str = Header(None)):
+@router.get("/get-full-exam-ranking")
+async def get_full_exam_ranking(exam_id: str, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = ExamService().get_exam_ranking(exam_id)
+        res = ExamService().get_full_exam_ranking(exam_id)
+        return res
+
+@router.get("/get-shortcut-exam-ranking")
+async def get_shortcut_exam_ranking(exam_id: str, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = ExamService().get_shortcut_exam_ranking(exam_id, token)
         return res
 
 @router.get("/get_exams_for_room")
@@ -40,9 +46,9 @@ async def get_user(email: str, token: str = Header(None)):
         return res
 
 @router.post("/save_result")
-async def save_result(result: Result, token: str = Header(None)):
+async def save_result(result: NewResult, token: str = Header(None)):
     if AuthService().validate_token(token):
-        res = ExamService().save_result(result)
+        res = ExamService().save_result(result, token)
         return res
 
 @router.put("/update_user")

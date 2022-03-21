@@ -34,8 +34,6 @@ class AuthService:
             data = AuthUtil.decode_token(token)
             email: str = data["email"]
             exp = data["exp"]
-            print("daaaa", email)
-            print("daaaa1", self.repo.get_token_by_email(email).token)
             expire = datetime.fromtimestamp(exp)
             if not self.repo.get_token_by_email(email):
                 raise CredentialException(message="Could not validate credentials")

@@ -45,7 +45,7 @@ async def delete_user(email: str, token: str = Header(None)):
         res = UserService().delete_user(email)
         return res
 
-@router.post("/admin/get_all_admin")
+@router.get("/admin/get_all_admin")
 async def get_all_admin(token: str = Header(None)):
     if AuthService().validate_token(token):
         if not UserService().check_super_admin_permission(token):
@@ -53,7 +53,7 @@ async def get_all_admin(token: str = Header(None)):
         res = UserService().get_all_admin()
         return res
 
-@router.post("/admin/get_all_super_admin")
+@router.get("/admin/get_all_super_admin")
 async def get_all_super_admin(token: str = Header(None)):
     if AuthService().validate_token(token):
         if not UserService().check_super_admin_permission(token):
@@ -61,7 +61,7 @@ async def get_all_super_admin(token: str = Header(None)):
         res = UserService().get_all_super_admin()
         return res
 
-@router.post("/admin/get_users_in_room")
+@router.get("/admin/get_users_in_room")
 async def get_users_in_room(room: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         if not UserService().check_admin_permission(token):
