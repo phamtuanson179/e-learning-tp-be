@@ -74,3 +74,19 @@ class ExamService:
                                 create_at=TimeUtil.get_timestamp_now())
         res =  ResultRepo().save_result(test_result)
         return "Save result success"
+
+    def save_img(self, new_result: NewResult, token: str):
+        exam = ExamRepo().get_exam(new_result.exam_id)
+        data = AuthUtil.decode_token(token)
+        user = UserService().get_user(data["email"])
+
+        test_result = FullResult(user_id=user.user_id, 
+                                exam_id=new_result.exam_id, 
+                                point=new_result.point, 
+                                max_point=len(exam.questions)*10, 
+                                is_pass=new_result.is_pass, 
+                                duration=new_result.duration,
+                                user_name=user.fullname,
+                                create_at=TimeUtil.get_timestamp_now())
+        res =  ResultRepo().save_result(test_result)
+        return "Save result success"

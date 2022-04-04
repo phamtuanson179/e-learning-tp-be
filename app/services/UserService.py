@@ -1,5 +1,7 @@
+from fastapi import UploadFile
 import starlette.status
-import jwt
+import aiofiles
+import os
 from app.configs.Config import AuthConfig
 from app.repositories.UserRepo import UserRepo
 from app.repositories.ExamRepo import ExamRepo
@@ -7,7 +9,9 @@ from app.models.User import NewUser, User
 from app.models.Exam import Exam
 from app.exceptions.CredentialException import CredentialException
 from app.utils.AuthUtil import AuthUtil
+from app.utils.TimeUtil import TimeUtil
 from app.configs.Config import RoleConfig
+from fastapi.responses import FileResponse
 
 class UserService:
     
@@ -82,3 +86,23 @@ class UserService:
                 raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
         res = self.repo.update_user(info)
         return "Update success"
+
+    async def upload_file(self, file: UploadFile):
+        name = file.filename
+        path = "assets/image/" + TimeUtil.get_timestamp_now() + name
+        async with aiofiles.open(path, 'wb') as out_file:
+            content = await file.read()
+            await out_file.write(content)
+        return path
+
+    def get_file(self, url: str):
+        return FileResponse(url)
+
+    async def update_file(self, url_old_file: str, file: UploadFile):
+        name = file.filename
+        path = "assets/image/" + TimeUtil.get_timestamp_now() + name
+        async with aiofiles.open(path, 'wb') as out_file:
+            content = await file.read()
+            await out_file.write(content)
+        os.remove(url_old_file)
+        return path

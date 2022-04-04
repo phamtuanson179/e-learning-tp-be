@@ -1,13 +1,15 @@
-from fastapi import APIRouter, Header
-
+from fastapi.staticfiles import StaticFiles
+from fastapi import APIRouter, Header, File, UploadFile
 from app.services.UserService import UserService
 from app.services.AuthService import AuthService
 from app.models.User import User
 from app.services.ExamService import ExamService
 from app.models.User import User
-from app.models.Result import Result, NewResult
+from app.models.Result import NewResult
 
 router = APIRouter()
+
+router.mount("/assets/avatar", StaticFiles(directory="assets/image/"), name="static")
 
 @router.get("/get_exam")
 async def get_exam(id: str, token: str = Header(None)):
@@ -55,4 +57,22 @@ async def save_result(result: NewResult, token: str = Header(None)):
 async def update_user(info: User, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = UserService().update_user(info, token)
+        return res
+
+@router.post("/upload-file/")
+async def upload_file(file: UploadFile=File(...), token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = await UserService().upload_file(file)
+        return res
+
+@router.post("/get-file/")
+async def get_file(url_file: str, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = UserService().get_file(url_file)
+        return res
+
+@router.post("/update-file/")
+async def update_file(url_old_file: str, file: UploadFile=File(...), token: str = Header(None)):
+    if AuthService().validate_token(token):
+        res = await UserService().update_file(url_old_file, file)
         return res

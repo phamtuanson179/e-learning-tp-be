@@ -6,4 +6,4 @@ class TimeUtil:
         return time.strftime("%Y-%m-%d %H:%M:%S")
 
     def get_timestamp_now() -> str:
-        return str(datetime.now().timestamp())
+        return str(int(datetime.now().timestamp()))
