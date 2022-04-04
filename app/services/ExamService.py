@@ -6,6 +6,7 @@ from app.repositories.ResultRepo import ResultRepo
 from app.models.Exam import Exam, NewExam
 from app.models.Result import Result, NewResult, FullResult
 from app.exceptions.CredentialException import CredentialException
+from app.exceptions.RequestException import RequestException
 from app.configs.Config import AuthConfig
 from app.utils.AuthUtil import AuthUtil
 from app.utils.TimeUtil import TimeUtil
@@ -38,7 +39,7 @@ class ExamService:
     def get_exam(self, id: str):
         _u = ExamRepo().get_exam(id)
         if not _u:
-            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Exam not exists")
+            raise RequestException(message= "Exam not exists")
         return _u
 
     def get_exams_for_room(self, room: str):
@@ -90,3 +91,11 @@ class ExamService:
                                 create_at=TimeUtil.get_timestamp_now())
         res =  ResultRepo().save_result(test_result)
         return "Save result success"
+
+    def update_exam(self, exam: Exam):
+        self.get_exam(exam.id)
+        try:
+            self.repo.update_exam(exam)
+        except:
+            raise RequestException(message="Update fail!")
+        return "Success"

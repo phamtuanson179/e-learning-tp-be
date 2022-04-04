@@ -9,8 +9,6 @@ from app.models.Result import NewResult
 
 router = APIRouter()
 
-router.mount("/assets/avatar", StaticFiles(directory="assets/image/"), name="static")
-
 @router.get("/get_exam")
 async def get_exam(id: str, token: str = Header(None)):
     if AuthService().validate_token(token):
@@ -65,13 +63,13 @@ async def upload_file(file: UploadFile=File(...), token: str = Header(None)):
         res = await UserService().upload_file(file)
         return res
 
-@router.post("/get-file/")
+@router.get("/get-file/")
 async def get_file(url_file: str, token: str = Header(None)):
     if AuthService().validate_token(token):
         res = UserService().get_file(url_file)
         return res
 
-@router.post("/update-file/")
+@router.put("/update-file/")
 async def update_file(url_old_file: str, file: UploadFile=File(...), token: str = Header(None)):
     if AuthService().validate_token(token):
         res = await UserService().update_file(url_old_file, file)

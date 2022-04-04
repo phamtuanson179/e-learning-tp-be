@@ -4,7 +4,8 @@ from app.services.UserService import UserService
 from app.services.AuthService import AuthService
 from app.services.ExamService import ExamService
 from app.models.User import NewUser, User
-from app.models.Exam import NewExam
+from app.models.Exam import Exam, NewExam
+from app.models.Room import Room
 from app.configs.Config import RoleConfig
 from app.exceptions.CredentialException import CredentialException
 
@@ -79,4 +80,12 @@ async def update_admin(info: User, token: str = Header(None)):
             if not UserService().check_admin_permission(token):
                 raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
         res = UserService().update_admin(info)
+        return res
+
+@router.put("/admin/update_exam")
+async def update_exam(info: Exam, token: str = Header(None)):
+    if AuthService().validate_token(token):
+        if not UserService().check_admin_permission(token):
+            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        res = ExamService().update_exam(info)
         return res

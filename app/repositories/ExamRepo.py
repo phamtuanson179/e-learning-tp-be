@@ -4,6 +4,7 @@ from app.utils.TimeUtil import TimeUtil
 from app.utils.CommonUtil import CommonUtil
 from app.models.Exam import Exam
 from .__init__ import *
+from app.exceptions.RequestException import RequestException
 
 
 class ExamRepo(BaseRepo):
@@ -38,3 +39,9 @@ class ExamRepo(BaseRepo):
         for record in exams:
             list_exams.append(ExamUtil.format_exam(record))
         return list_exams
+
+    def update_exam(self, exam: Exam):
+        query = {"id": exam.id,}
+        value = CommonUtil().nested_dict(exam)
+        res = self.collection.update_one(query, { "$set": value})
+        return res
