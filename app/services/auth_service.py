@@ -1,10 +1,10 @@
 import jwt
 from datetime import datetime
 
-from app.repositories.UserRepo import UserRepo
-from app.services.UserService import UserService
+from app.repositories.user_repo import UserRepo
+from app.services.user_service import UserService
 from app.exceptions.CredentialException import CredentialException
-from app.utils.AuthUtil import AuthUtil
+from app.utils.auth_util import AuthUtil
 from app.configs.Config import AuthConfig
 from app.utils import EmailUtil
 import string, random
@@ -16,17 +16,17 @@ class AuthService:
         self.__name__= "AuthService"
         self.repo = UserRepo()
 
-    async def authenticate_user(self, email: str, password: str):
+    async def authenticate_user(self, username: str, password: str):
         try:
-            user = self.repo.get_user_by_email(email)
+            user = self.repo.get_user_by_username(username)
             if not AuthUtil.verify_password(password, user.password):
                 raise CredentialException(message="UNAUTHORIZED")
         except Exception as e:
             print(e)
             raise CredentialException(message="UNAUTHORIZED")
 
-        access_token = AuthUtil.create_access_token(email)
-        res = self.repo.update_token(email, access_token)
+        access_token = AuthUtil.create_access_token(username)
+        res = self.repo.update_token(username, access_token)
         return {"access_token": access_token, "token_type": "bearer"}
 
     def validate_token(self, token: str):

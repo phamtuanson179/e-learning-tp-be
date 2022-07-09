@@ -1,38 +1,18 @@
-import email
-from typing import Optional
+from typing import List, Optional
 
 from pydantic import BaseModel
 
-class Account(BaseModel):
-    email: str
-    password: Optional[str] = None
 
-class User(Account):
-    user_id: Optional[str] = None
-    role: Optional[int] = None
-    room: str
+class UserCreate(BaseModel):
+    username:str
+    password: str
+    email: str
+    role: str
     fullname: str
-    position: str
-    date_of_birth: Optional[str] = None
-    url_avatar: Optional[str] = None
+    dob: str
+    list_subjects_id: Optional[List[str]]
+    avatar: Optional[str] 
     token: Optional[str] = None
 
-class NewUser(BaseModel):
-    email: str
-    password: str
-    room: str
-    role: int
-    fullname: str
-    position: str
-
-class AccessToken(BaseModel):
-    email: str
-    token: str
-
-class ForgotPassword(BaseModel):
-    email: str
-
-class ChangePassword(BaseModel):
-    curr_password: str
-    new_password: str
-    confirm_password: str
+class User(UserCreate):
+    id: str

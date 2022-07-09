@@ -3,12 +3,11 @@ import starlette.status
 import aiofiles
 import os
 from app.configs.Config import AuthConfig
-from app.repositories.UserRepo import UserRepo
-from app.repositories.ExamRepo import ExamRepo
-from app.models.User import NewUser, User
-from app.models.Exam import Exam
+from app.repositories.user_repo import UserRepo
+from app.repositories.exam_repo import ExamRepo
+from app.models.User import UserCreate, User
 from app.exceptions.CredentialException import CredentialException
-from app.utils.AuthUtil import AuthUtil
+from app.utils.auth_util import AuthUtil
 from app.utils.TimeUtil import TimeUtil
 from app.configs.Config import RoleConfig
 from fastapi.responses import FileResponse
@@ -41,12 +40,12 @@ class UserService:
         else:
             return False
 
-    def create_user(self, new_user: NewUser):
+    def create_user(self, new_user: UserCreate):
         _u = self.repo.get_user_by_email(new_user.email)
         if _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User already exists")
         hash_password = AuthUtil.hash_password(new_user.password)
-        user = User(email=new_user.email, password= hash_password, role=new_user.role, room=new_user.room, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
+        user = User(email=new_user.email, password= hash_password, role=new_user.role, subject=new_user.subject, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
         res = self.repo.create_user(user)
         return "Sucessfully created!"
 
@@ -70,8 +69,8 @@ class UserService:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User not exists")
         return _u
 
-    def get_users_in_room(self, room: str):
-        list_users = self.repo.get_users_in_room(room)
+    def get_users_in_subject(self, subject: str):
+        list_users = self.repo.get_users_in_subject(subject)
         return list_users
 
     def update_admin(self, info: User):

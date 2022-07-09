@@ -1,18 +1,19 @@
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
+from app.models.Question import Question
 
-class NewResult(BaseModel):
-    exam_id: str
+
+class ResultCreate(BaseModel):
+    subject_id: str 
     point: int
     is_pass: bool
-    duration: int
-
-class Result(NewResult):
-    id: Optional[str] = None
-    user_name: str
+    time: int
     user_id: str
-    max_point: int
+    questions: List[Question]
 
-class FullResult(Result):
+
+class Result(ResultCreate):
+    id: Optional[str] = None
+    max_point: int
     create_at: str

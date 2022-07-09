@@ -1,8 +1,7 @@
 
-from app.utils.UserUtil import UserUtil, User
-from app.utils.ExamUtil import ExamUtil
-from app.models.Exam import Exam
-from .__init__ import *
+from time import clock_getres
+from app.utils.user_util import UserUtil, User
+from . import *
 from app.configs.Config import RoleConfig
 
 
@@ -64,8 +63,17 @@ class UserRepo(BaseRepo):
         else:
             return UserUtil.format_user(users[0])
 
-    def get_users_in_room(self, room):
-        users = list(self.collection.find({"room": room}))
+    def get_user_by_username(self, username):
+        print(username)
+        user = self.collection.find_one({"username": username})
+        print("abcdef",user)
+        if not user:
+            return None
+        else:
+            return UserUtil.format_user(user)
+
+    def get_users_in_subject(self, subject):
+        users = list(self.collection.find({"subject": subject}))
         list_users = []
         for record in users:
             list_users.append(UserUtil.format_info_user(record))
@@ -73,7 +81,7 @@ class UserRepo(BaseRepo):
 
     def update_admin(self, info: User):
         query = { "email": info.email}
-        value = { "room": info.room,
+        value = { "subject": info.subject,
                 "fullname": info.fullname,
                 "role": info.role,
                 "position": info.position,
@@ -97,7 +105,7 @@ class UserRepo(BaseRepo):
 
     def update_user(self, info: User):
         query = { "email": info.email}
-        value = { "room": info.room,
+        value = { "subject": info.subject,
                 "fullname": info.fullname,
                 "position": info.position,
                 "date_of_birth": info.date_of_birth,

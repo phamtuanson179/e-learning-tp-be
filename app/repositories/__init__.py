@@ -1,21 +1,13 @@
 import pymongo
 from app.configs.Config import DBConfig
+from app.constants.common import DB
 class BaseRepo:
     def __init__(self):
-        self.myclient = pymongo.MongoClient(DBConfig.DB_URL)
-        self.mydb = self.myclient[DBConfig.DB_NAME]
+        self.myclient = pymongo.MongoClient(DB.URL)
+        self.mydb = self.myclient[DB.NAME]
         # print("aaaaaaaaaaaaa", self.myclient.server_info())
 
-    #ket noi db o local
-    #First step: create new db (db can co du lieu moi tao dc)
+    # First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]
-        # mydict = {"email": "test@gmail.com", "password": "123", "role": 0, "room": "AI", "fullname": "Test User", "position": "Frontend Developer", "date_of_birth": "01-01-1999", "url_avatar": "", "token": ""}
-        # mydict1 = {"email": "test1@gmail.com", "password": "123", "role": 0, "room": "AI", "fullname": "Test User 1", "position": "Backend Developer", "date_of_birth": "02-03-2001", "url_avatar": "", "token": ""}
+        # mydict = {"email": "admin@gmail.com", "password": "admin", "role": "ADMIN", "subject": None, "fullname": "Test User", "dob": "01-01-1999", "avatar": "", "token": "", "username": "admin","list_subjects_id": [],}
         # x = self.collection.insert_one(mydict)
-        # x = self.collection.insert_one(mydict1)
-
-    #print list db
-        # print(self.myclient.list_database_names())\
-    
-    #delete db
-        # self.myclient.drop_database("techpro_elearning")

@@ -1,4 +1,5 @@
-from app.models.User import User, AccessToken
+from app.models.User import User
+from app.models.Auth import AccessToken
 
 class UserUtil:
 
@@ -7,7 +8,7 @@ class UserUtil:
             user_id= str(user["_id"]),
             email=user["email"],
             role=user["role"],
-            room=user["room"],
+            subject=user["subject"],
             fullname=user["fullname"],
             position=user["position"],
             date_of_birth=user["date_of_birth"],
@@ -21,16 +22,18 @@ class UserUtil:
         )
 
     def format_user(user) -> User:
+        print("abc",user)
         return User(
+            id=str(user["_id"]),
             email=user["email"],
             password=user["password"],
             role=user["role"],
-            room=user["room"],
+            list_subjects_id=user["list_subjects_id"],
             fullname=user["fullname"],
-            position=user["position"],
-            date_of_birth=user["date_of_birth"],
-            url_avatar=user["url_avatar"],
-            token=user["token"]
+            dob=user["dob"],
+            avatar=user["avatar"],
+            token=user["token"],
+            username=user["username"]
         )
 
     
