@@ -1,3 +1,4 @@
+from unittest import result
 import jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -12,17 +13,17 @@ class AuthUtil:
     reusable_oauth2 = HTTPBearer(scheme_name='Authorization')
 
     def verify_password(plain_password, hashed_password):
-        # return AuthUtil.pwd_context.verify(plain_password, hashed_password)
-        return True
+        return AuthUtil.pwd_context.verify(plain_password, hashed_password)
+        # return True
 
     def hash_password(password):
         return AuthUtil.pwd_context.hash(password)
 
-    def create_access_token(email: str) -> str:
+    def create_access_token(username: str) -> str:
         expires_delta = timedelta(minutes=AuthConfig.EXPIRE_MINUTES)
         expires_at = datetime.utcnow() + expires_delta
         to_encode = {
-            "email": email, 
+            "username": username, 
             "exp": expires_at
             }
         encoded_jwt = jwt.encode(to_encode, key=AuthConfig.SECRET_KEY, algorithm=AuthConfig.ALGORITHM)
@@ -30,7 +31,6 @@ class AuthUtil:
 
     def decode_token(token: str):
         payload = jwt.decode(token, AuthConfig.SECRET_KEY, algorithms=AuthConfig.ALGORITHM)
-        email: str = payload.get("email")
+        username = payload.get("username")
         exp = payload.get("exp")
-        data = {"email": email, "exp": exp}
-        return data
+        return {"username": username, "exp": exp}

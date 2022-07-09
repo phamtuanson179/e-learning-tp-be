@@ -43,15 +43,12 @@ class UserRepo(BaseRepo):
         else:
             return UserUtil.format_info_user(users[0])
 
-    def get_token_by_email(self, email):
-        users = list(self.collection.find({"email": email}))
-        count = 0
-        for record in users:
-            count += 1
-        if count < 1:
+    def get_token_by_username(self, username):
+        user = self.collection.find_one({"username": username})
+        if not user:
             return None
         else:
-            return UserUtil.format_token(users[0])
+            return UserUtil.format_token(user)
         
     def get_user_by_email(self, email):
         users = list(self.collection.find({"email": email}))
@@ -64,9 +61,7 @@ class UserRepo(BaseRepo):
             return UserUtil.format_user(users[0])
 
     def get_user_by_username(self, username):
-        print(username)
         user = self.collection.find_one({"username": username})
-        print("abcdef",user)
         if not user:
             return None
         else:
@@ -91,8 +86,8 @@ class UserRepo(BaseRepo):
         res = self.collection.update_one(query, { "$set": value})
         return res
 
-    def update_token(self, email, token):
-        query = { "email": email}
+    def update_token(self, username, token):
+        query = { "username": username}
         value = { "token": token}
         res = self.collection.update_one(query, { "$set": value})
         return res

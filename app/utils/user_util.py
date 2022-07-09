@@ -17,12 +17,11 @@ class UserUtil:
 
     def format_token(user) -> AccessToken:
         return AccessToken(
-            email=user["email"],
+            username=user["username"],
             token=user["token"]
         )
 
     def format_user(user) -> User:
-        print("abc",user)
         return User(
             id=str(user["_id"]),
             email=user["email"],

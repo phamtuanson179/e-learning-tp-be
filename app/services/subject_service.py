@@ -23,19 +23,18 @@ class SubjectService:
             raise RequestException(message="Get subjects fail!")
         return subjects
 
-    def get_subject(self, alias: str):
+    def get_subject_by_id(self, id: str):
         try:
-            subject = self.repo.get_subject(alias)
+            subject = self.repo.get_subject_by_id(id)
         except:
             raise RequestException(message="Get subjects fail!")
         if not subject:
             raise RequestException(message="subject does not exist!")
         return subject
 
-    def update_subject(self, subject: Subject):
-        self.get_subject(subject.alias)
+    def update_subject(self,id: str, subject: Subject):
         try:
-            self.repo.update_subject(subject)
+            self.repo.update_subject(id,subject)
         except:
             raise RequestException(message="Update subject fail!")
         return "Success"

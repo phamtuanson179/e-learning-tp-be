@@ -3,6 +3,7 @@ import starlette.status
 import aiofiles
 import os
 from app.configs.Config import AuthConfig
+from app.constants.common import ROLE
 from app.repositories.user_repo import UserRepo
 from app.repositories.exam_repo import ExamRepo
 from app.models.User import UserCreate, User
@@ -10,6 +11,7 @@ from app.exceptions.CredentialException import CredentialException
 from app.utils.auth_util import AuthUtil
 from app.utils.TimeUtil import TimeUtil
 from app.configs.Config import RoleConfig
+from app.utils.user_util import UserUtil
 from fastapi.responses import FileResponse
 
 class UserService:
@@ -29,24 +31,37 @@ class UserService:
         else:
             return False
 
-    def check_super_admin_permission(self, token: str):
+    def is_admin(self, token: str):
         data = AuthUtil.decode_token(token)
-        email: str = data["email"]
-        user_call_api = self.repo.get_user_by_email(email)
-        if not user_call_api:
+        username: str = data["username"]
+        cur_user = self.repo.get_token_by_username(username)
+        if not cur_user:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
-        if(user_call_api.role == RoleConfig.ROLE_SUPERADMIN):
+        if(cur_user.role == ROLE.ADMIN):
+            return True
+        else:
+            return False
+
+    def is_teacher(self, token: str):
+        data = AuthUtil.decode_token(token)
+        username: str = data["username"]
+        cur_user = self.repo.get_token_by_username(username)
+        if not cur_user:
+            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Error user call api not exist")
+        if(cur_user.role == ROLE.TEACHER):
             return True
         else:
             return False
 
     def create_user(self, new_user: UserCreate):
-        _u = self.repo.get_user_by_email(new_user.email)
+        _u = self.repo.get_user_by_username(new_user.username)
         if _u:
             raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "User already exists")
         hash_password = AuthUtil.hash_password(new_user.password)
-        user = User(email=new_user.email, password= hash_password, role=new_user.role, subject=new_user.subject, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
-        res = self.repo.create_user(user)
+        new_user.password = hash_password
+        # user = User(email=new_user.email, password= hash_password, role=new_user.role, subject=new_user.subject, fullname=new_user.fullname, position=new_user.position, date_of_birth="", url_avatar="", token="")
+        # formated_user = UserUtil.format_user(new_user)
+        res = self.repo.create_user(new_user)
         return "Sucessfully created!"
 
     def delete_user(self, email: str):

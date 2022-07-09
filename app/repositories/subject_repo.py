@@ -1,6 +1,7 @@
 
 from app.utils.subject_util import SubjectUtil
 from app.models.Subject import Subject
+from bson.objectid import ObjectId
 from . import *
 
 
@@ -12,20 +13,17 @@ class SubjectRepo(BaseRepo):
 
     def get_all_subject(self):
         subjects = list(self.collection.find({}))
-        list_subjects = []
-        for record in subjects:
-            list_subjects.append(SubjectUtil.format_subject(record))
-        return list_subjects
+        formated_subjects = []
+        for subject in subjects:
+            formated_subjects.append(SubjectUtil.format_subject(subject))
+        return formated_subjects
 
-    def get_subject(self, alias: str):
-        subjects = list(self.collection.find({"alias": alias}))
-        count = 0
-        for record in subjects:
-            count += 1
-        if count < 1:
+    def get_subject_by_id(self, id: str):
+        subject = self.collection.find_one({"_id": ObjectId(id)})
+        if not subject:
             return None
         else:
-            return SubjectUtil.format_subject(subjects[0])
+            return SubjectUtil.format_subject(subject)
 
     def create_subject(self, subject: Subject):
         res = self.collection.insert_one(subject.__dict__)
@@ -35,11 +33,12 @@ class SubjectRepo(BaseRepo):
         res = self.collection.delete_one({"alias": alias})
         return res
 
-    def update_subject(self, info: Subject):
-        query = {"alias": info.alias,}
-        value = {"name": info.name,
-                "alias": info.alias,
-                "description": info.description
-                }
-        res = self.collection.update_one(query, { "$set": value})
+    def update_subject(self, id:str,subject: Subject):
+        print(id,subject)
+        res = self.collection.find_one_and_update({"_id": ObjectId(id)},{"$set": subject.__dict__})
+        # subject = self.collection.find_one({"_id": ObjectId(id)})
+
+        # print(subject)
+        print(res)
+
         return res

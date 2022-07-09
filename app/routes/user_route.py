@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 import starlette
 from app.configs.Config import RoleConfig
+from app.constants.common import ROLE
 from app.exceptions import CredentialException
 from app.services.user_service import UserService
 from app.services.auth_service import AuthService
@@ -19,14 +20,14 @@ async def get_user(email: str, token: str = Depends(oauth2_scheme)):
 
 @router.post("/create")
 async def create_user(new_user: UserCreate, token: str = Depends(oauth2_scheme)):
-    if AuthService().validate_token(token):
-        if (new_user.role == RoleConfig.ROLE_SUPERADMIN):
-            if not UserService().check_super_admin_permission(token):
-                raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        elif not UserService().check_admin_permission(token):
-            raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
-        res = UserService().create_user(new_user)
-        return res
+    # if AuthService().validate_token(token):
+        # if (new_user.role == ROLE.ADMIN):
+        #     if not UserService().is_admin(token):
+        #         raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+        # elif not (UserService().is_admin(token) or  UserService().is_teacher(token)) :
+        #     raise CredentialException(status_code=starlette.status.HTTP_412_PRECONDITION_FAILED, message= "Permission denied")
+    res = UserService().create_user(new_user)
+    return res
 
 
 @router.put("/update")

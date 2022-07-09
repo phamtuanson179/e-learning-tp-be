@@ -5,7 +5,6 @@ class BaseRepo:
     def __init__(self):
         self.myclient = pymongo.MongoClient(DB.URL)
         self.mydb = self.myclient[DB.NAME]
-        # print("aaaaaaaaaaaaa", self.myclient.server_info())
 
     # First step: create new db (db can co du lieu moi tao dc)
         # self.collection = self.mydb["users"]

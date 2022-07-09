@@ -7,7 +7,7 @@ class Account(BaseModel):
     password: Optional[str] = None
 
 class AccessToken(BaseModel):
-    email: str
+    username: str
     token: str
 
 class ForgotPassword(BaseModel):

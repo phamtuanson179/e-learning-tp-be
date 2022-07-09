@@ -1,3 +1,4 @@
+from re import U
 import jwt
 from datetime import datetime
 
@@ -32,12 +33,13 @@ class AuthService:
     def validate_token(self, token: str):
         try:
             data = AuthUtil.decode_token(token)
-            email: str = data["email"]
+            username: str = data["username"]
             exp = data["exp"]
             expire = datetime.fromtimestamp(exp)
-            if not self.repo.get_token_by_email(email):
+            finded_token = self.repo.get_token_by_username(username)
+            if not finded_token:
                 raise CredentialException(message="Could not validate credentials")
-            if token != self.repo.get_token_by_email(email).token:
+            if token != finded_token.token:
                 raise CredentialException(message="Could not validate credentials")
             if expire < datetime.utcnow():
                 raise CredentialException(message="Token expired")
